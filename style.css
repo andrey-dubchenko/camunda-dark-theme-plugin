@@ -1,0 +1,838 @@
+/* ============================================================
+   Camunda Modeler — Dark Theme (Dracula-inspired, lighter)
+   ============================================================ */
+
+body.dark-theme {
+  /* Dracula palette, slightly lightened */
+  --dt-bg0:     #282a36;   /* canvas background */
+  --dt-bg1:     #2f3240;   /* app shell, tab bar */
+  --dt-bg2:     #383a4a;   /* panels, inputs */
+  --dt-bg3:     #343647;   /* properties panel */
+  --dt-bgh:     #44475a;   /* hover */
+  --dt-border:  #4a4d6a;   /* borders */
+  --dt-focus:   #bd93f9;   /* focus ring (dracula purple) */
+  --dt-text:    #f8f8f2;   /* primary text */
+  --dt-text2:   #b0b4cc;   /* secondary text */
+  --dt-text3:   #6272a4;   /* muted text */
+  --dt-accent:  #bd93f9;   /* purple */
+  --dt-cyan:    #8be9fd;
+  --dt-green:   #50fa7b;
+  --dt-orange:  #ffb86c;
+  --dt-pink:    #ff79c6;
+  --dt-red:     #ff5555;
+  --dt-yellow:  #f1fa8c;
+}
+
+/* ── App shell ───────────────────────────────────────────── */
+body.dark-theme,
+body.dark-theme #app,
+body.dark-theme .app {
+  background: var(--dt-bg0) !important;
+  color: var(--dt-text) !important;
+}
+
+/* Catch-all text colour */
+body.dark-theme div,
+body.dark-theme section,
+body.dark-theme aside,
+body.dark-theme article,
+body.dark-theme main,
+body.dark-theme nav,
+body.dark-theme header,
+body.dark-theme footer,
+body.dark-theme span,
+body.dark-theme p,
+body.dark-theme li,
+body.dark-theme td,
+body.dark-theme th {
+  color: var(--dt-text) !important;
+}
+
+/* ── Menu bar ────────────────────────────────────────────── */
+body.dark-theme [class*="MenuBar"],
+body.dark-theme [class*="menu-bar"],
+body.dark-theme [class*="HeaderBar"],
+body.dark-theme [class*="header-bar"] {
+  background: var(--dt-bg1) !important;
+  border-bottom: 1px solid var(--dt-border) !important;
+  color: var(--dt-text) !important;
+}
+
+/* ── Tab bar ─────────────────────────────────────────────── */
+body.dark-theme [class*="TabBar"],
+body.dark-theme [class*="tab-bar"],
+body.dark-theme [class*="Tabs"],
+body.dark-theme [class*="tabs__"] {
+  background: var(--dt-bg1) !important;
+  border-bottom: 1px solid var(--dt-border) !important;
+}
+
+body.dark-theme [class*="Tab__"],
+body.dark-theme [class*="tab__"],
+body.dark-theme [class*="TabBar"] > * {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text2) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme [class*="Tab--active"],
+body.dark-theme [class*="Tab__active"],
+body.dark-theme [class*="tab--active"],
+body.dark-theme [class*="Tab"][class*="active"] {
+  background: var(--dt-bg0) !important;
+  color: var(--dt-text) !important;
+}
+
+/* ── Status bar ──────────────────────────────────────────── */
+body.dark-theme [class*="StatusBar"],
+body.dark-theme [class*="status-bar"],
+body.dark-theme [class*="statusBar"] {
+  background: var(--dt-bg1) !important;
+  border-top: 1px solid var(--dt-border) !important;
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme [class*="StatusBar"] button,
+body.dark-theme [class*="status-bar"] button {
+  background: transparent !important;
+  color: var(--dt-text2) !important;
+  border-color: transparent !important;
+}
+
+body.dark-theme [class*="StatusBar"] button:hover,
+body.dark-theme [class*="status-bar"] button:hover {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+/* ── Editor / content wrapper ────────────────────────────── */
+body.dark-theme [class*="MainEditor"],
+body.dark-theme [class*="main-editor"],
+body.dark-theme [class*="Editor__"],
+body.dark-theme [class*="editor__"],
+body.dark-theme [class*="Content__"],
+body.dark-theme [class*="content__"],
+body.dark-theme [class*="EmptyTab"],
+body.dark-theme [class*="StartPage"],
+body.dark-theme [class*="WelcomePage"] {
+  background: var(--dt-bg0) !important;
+  color: var(--dt-text) !important;
+}
+
+/* ── Properties panel — Camunda 8 ────────────────────────── */
+body.dark-theme [class*="bio-properties-panel"],
+body.dark-theme [class*="PropertiesPanel"],
+body.dark-theme [class*="properties-panel"] {
+  background: var(--dt-bg3) !important;
+  color: var(--dt-text) !important;
+  border-left: 1px solid var(--dt-border) !important;
+}
+
+body.dark-theme [class*="bio-properties-panel"] *,
+body.dark-theme [class*="PropertiesPanel"] *,
+body.dark-theme [class*="properties-panel"] * {
+  background: var(--dt-bg3) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme [class*="bio-properties-panel-header"],
+body.dark-theme [class*="bio-properties-panel-group-header"],
+body.dark-theme [class*="group__header"],
+body.dark-theme [class*="PropertiesPanel"] [class*="header"],
+body.dark-theme [class*="PropertiesPanel"] [class*="Header"],
+body.dark-theme [class*="properties-panel"] .group-header {
+  background: var(--dt-bg2) !important;
+  border-bottom: 1px solid var(--dt-border) !important;
+  color: var(--dt-text2) !important;
+}
+
+/* ── Properties panel — Camunda 7 ────────────────────────── */
+body.dark-theme .bpp-properties-panel,
+body.dark-theme .bpp-properties-panel *,
+body.dark-theme .properties-panel-parent,
+body.dark-theme .properties-panel-parent * {
+  background: var(--dt-bg3) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme .bpp-properties-panel .group-header,
+body.dark-theme .bpp-properties-panel .bpp-panel-header,
+body.dark-theme .properties-panel-parent .group-header {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text2) !important;
+}
+
+/* ── Labels ──────────────────────────────────────────────── */
+body.dark-theme label,
+body.dark-theme [class*="label"],
+body.dark-theme [class*="Label"] {
+  color: var(--dt-text2) !important;
+  background: transparent !important;
+}
+
+/* ── Inputs ──────────────────────────────────────────────── */
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select,
+body.dark-theme [contenteditable="true"],
+body.dark-theme [class*="input__"],
+body.dark-theme [class*="Input__"],
+body.dark-theme [class*="Textarea"],
+body.dark-theme [class*="textarea"] {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme input:focus,
+body.dark-theme textarea:focus,
+body.dark-theme select:focus {
+  border-color: var(--dt-focus) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px var(--dt-focus) !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: var(--dt-text3) !important;
+  opacity: 1 !important;
+}
+
+body.dark-theme input[type="checkbox"],
+body.dark-theme input[type="radio"] {
+  accent-color: var(--dt-accent) !important;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+body.dark-theme button:not(.dark-theme-btn) {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme button:not(.dark-theme-btn):hover {
+  background: var(--dt-bgh) !important;
+}
+
+body.dark-theme [class*="btn-primary"],
+body.dark-theme [class*="btn--primary"] {
+  background: var(--dt-accent) !important;
+  color: var(--dt-bg0) !important;
+  border-color: var(--dt-accent) !important;
+}
+
+body.dark-theme a { color: var(--dt-cyan) !important; }
+
+/* ── BPMN canvas ─────────────────────────────────────────── */
+
+/* Wrapper divs */
+body.dark-theme .bjs-container,
+body.dark-theme [class*="bjs-container"],
+body.dark-theme .djs-container,
+body.dark-theme .canvas,
+body.dark-theme [class*="canvas__"],
+body.dark-theme [class*="Canvas"] {
+  background: var(--dt-bg0) !important;
+}
+
+/* The SVG root element */
+body.dark-theme .bjs-container svg,
+body.dark-theme .djs-container svg,
+body.dark-theme svg.djs-overlay-container {
+  background: var(--dt-bg0) !important;
+}
+
+/* diagram-js white background rect (first rect inside root <g>) */
+body.dark-theme svg > g > rect:first-child,
+body.dark-theme .layer-base > rect:first-child,
+body.dark-theme .djs-drilldown-overlay {
+  fill: var(--dt-bg0) !important;
+}
+
+/* Reset/zoom button (white box top-right corner) */
+body.dark-theme .bjs-powered-by,
+body.dark-theme [class*="powered-by"],
+body.dark-theme .djs-reset-zoom,
+body.dark-theme [title*="Reset Zoom"],
+body.dark-theme [title*="reset"],
+body.dark-theme .bjs-container > div:not(.djs-container) {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text2) !important;
+  border-color: var(--dt-border) !important;
+}
+
+/* Inline style white backgrounds */
+body.dark-theme [style*="background: white"],
+body.dark-theme [style*="background: #fff"],
+body.dark-theme [style*="background: #ffffff"],
+body.dark-theme [style*="background-color: white"],
+body.dark-theme [style*="background-color: #fff"],
+body.dark-theme [style*="background-color: rgb(255, 255, 255)"] {
+  background: var(--dt-bg0) !important;
+  background-color: var(--dt-bg0) !important;
+}
+
+/* ── BPMN shapes ─────────────────────────────────────────── */
+body.dark-theme .djs-element .djs-visual > rect,
+body.dark-theme .djs-element .djs-visual > circle,
+body.dark-theme .djs-element .djs-visual > polygon,
+body.dark-theme .djs-element .djs-visual > ellipse,
+body.dark-theme .djs-element .djs-visual > path {
+  fill: var(--dt-bg2) !important;
+  stroke: var(--dt-border) !important;
+}
+
+body.dark-theme .djs-element.selected .djs-visual > rect,
+body.dark-theme .djs-element.selected .djs-visual > circle,
+body.dark-theme .djs-element.selected .djs-visual > polygon,
+body.dark-theme .djs-element.selected .djs-visual > ellipse,
+body.dark-theme .djs-element.selected .djs-visual > path {
+  stroke: var(--dt-accent) !important;
+  stroke-width: 2px !important;
+}
+
+body.dark-theme .djs-element.hover .djs-visual > rect,
+body.dark-theme .djs-element.hover .djs-visual > circle,
+body.dark-theme .djs-element.hover .djs-visual > polygon,
+body.dark-theme .djs-element.hover .djs-visual > ellipse {
+  stroke: var(--dt-cyan) !important;
+}
+
+body.dark-theme .djs-element .djs-visual text {
+  fill: var(--dt-text) !important;
+}
+
+/* Sequence flows */
+body.dark-theme .djs-connection .djs-visual path,
+body.dark-theme .djs-connection .djs-visual polyline {
+  stroke: var(--dt-text3) !important;
+  fill: none !important;
+}
+
+body.dark-theme .djs-connection.selected .djs-visual path {
+  stroke: var(--dt-accent) !important;
+}
+
+/* Arrow markers */
+body.dark-theme marker path,
+body.dark-theme marker polygon {
+  fill: var(--dt-text3) !important;
+  stroke: var(--dt-text3) !important;
+}
+
+/* Grid dots */
+body.dark-theme .djs-grid circle {
+  fill: var(--dt-border) !important;
+  stroke: none !important;
+  opacity: 0.4 !important;
+}
+
+/* Shape icons / task type markers */
+body.dark-theme .djs-element .djs-visual [stroke="black"],
+body.dark-theme .djs-element .djs-visual [stroke="#000"],
+body.dark-theme .djs-element .djs-visual [stroke="#000000"] {
+  stroke: var(--dt-text2) !important;
+}
+
+body.dark-theme .djs-element .djs-visual [fill="black"],
+body.dark-theme .djs-element .djs-visual [fill="#000"],
+body.dark-theme .djs-element .djs-visual [fill="#000000"] {
+  fill: var(--dt-text2) !important;
+}
+
+body.dark-theme .djs-element .djs-visual [fill="white"],
+body.dark-theme .djs-element .djs-visual [fill="#fff"],
+body.dark-theme .djs-element .djs-visual [fill="#ffffff"],
+body.dark-theme .djs-element .djs-visual [style*="fill: white"],
+body.dark-theme .djs-element .djs-visual [style*="fill: rgb(255"] {
+  fill: var(--dt-bg2) !important;
+}
+
+/* Selection box */
+body.dark-theme .djs-lasso-tool rect,
+body.dark-theme .djs-selection rect {
+  stroke: var(--dt-accent) !important;
+  fill: rgba(189,147,249,0.1) !important;
+}
+
+/* ── Palette ─────────────────────────────────────────────── */
+body.dark-theme .djs-palette {
+  background: var(--dt-bg3) !important;
+  border: 1px solid var(--dt-border) !important;
+  border-radius: 6px !important;
+}
+
+body.dark-theme .djs-palette .entry {
+  color: var(--dt-text2) !important;
+  background: transparent !important;
+}
+
+body.dark-theme .djs-palette .entry:hover {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+body.dark-theme .djs-palette .highlighted-entry {
+  background: rgba(189,147,249,0.2) !important;
+  color: var(--dt-accent) !important;
+}
+
+body.dark-theme .djs-palette-separator {
+  border-top-color: var(--dt-border) !important;
+  background: transparent !important;
+}
+
+/* ── Context pad ─────────────────────────────────────────── */
+body.dark-theme .djs-context-pad {
+  background: var(--dt-bg3) !important;
+  border: 1px solid var(--dt-border) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5) !important;
+}
+
+body.dark-theme .djs-context-pad .entry {
+  background: var(--dt-bg3) !important;
+}
+
+body.dark-theme .djs-context-pad .entry:hover {
+  background: var(--dt-bgh) !important;
+}
+
+/* ── Popup / replace menu ────────────────────────────────── */
+body.dark-theme .djs-popup {
+  background: var(--dt-bg3) !important;
+  border: 1px solid var(--dt-border) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.6) !important;
+  color: var(--dt-text) !important;
+}
+
+body.dark-theme .djs-popup * {
+  background: var(--dt-bg3) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme .djs-popup-header {
+  background: var(--dt-bg2) !important;
+  border-bottom: 1px solid var(--dt-border) !important;
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme .djs-popup .entry:hover {
+  background: var(--dt-bgh) !important;
+}
+
+body.dark-theme .djs-popup input {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+/* ── Tooltip ─────────────────────────────────────────────── */
+body.dark-theme [class*="tooltip"],
+body.dark-theme [class*="Tooltip"] {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border: 1px solid var(--dt-border) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.5) !important;
+}
+
+/* ── Modals / overlays ───────────────────────────────────── */
+body.dark-theme [class*="modal__overlay"],
+body.dark-theme [class*="Modal__overlay"],
+body.dark-theme [class*="Overlay"]:not(.djs-overlay-container) {
+  background: rgba(0,0,0,.75) !important;
+}
+
+body.dark-theme [class*="modal__content"],
+body.dark-theme [class*="Modal__content"],
+body.dark-theme [class*="dialog"],
+body.dark-theme [class*="Dialog"] {
+  background: var(--dt-bg1) !important;
+  border: 1px solid var(--dt-border) !important;
+  color: var(--dt-text) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,.7) !important;
+}
+
+/* ── Log / bottom panels ─────────────────────────────────── */
+body.dark-theme [class*="LogTab"],
+body.dark-theme [class*="LintingTab"],
+body.dark-theme [class*="BottomPanel"],
+body.dark-theme [class*="Panel"] {
+  background: var(--dt-bg1) !important;
+  border-color: var(--dt-border) !important;
+  color: var(--dt-text2) !important;
+}
+
+/* ── Code blocks ─────────────────────────────────────────── */
+body.dark-theme pre,
+body.dark-theme code {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-yellow) !important;
+  border-color: var(--dt-border) !important;
+}
+
+/* ── Dropdowns ───────────────────────────────────────────── */
+body.dark-theme [class*="dropdown"],
+body.dark-theme [class*="Dropdown"],
+body.dark-theme [class*="DropdownMenu"] {
+  background: var(--dt-bg2) !important;
+  border: 1px solid var(--dt-border) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.6) !important;
+}
+
+body.dark-theme [class*="dropdown"] li:hover,
+body.dark-theme [class*="Dropdown"] li:hover {
+  background: var(--dt-bgh) !important;
+}
+
+/* ── Notifications ───────────────────────────────────────── */
+body.dark-theme [class*="Notification"],
+body.dark-theme [class*="notification"] {
+  background: var(--dt-bg2) !important;
+  border: 1px solid var(--dt-border) !important;
+  color: var(--dt-text) !important;
+}
+
+/* ── Scrollbars ──────────────────────────────────────────── */
+body.dark-theme ::-webkit-scrollbar { width: 8px; height: 8px; }
+body.dark-theme ::-webkit-scrollbar-track { background: var(--dt-bg1); }
+body.dark-theme ::-webkit-scrollbar-thumb { background: var(--dt-border); border-radius: 4px; }
+body.dark-theme ::-webkit-scrollbar-thumb:hover { background: var(--dt-text3); }
+
+/* ── Transitions ─────────────────────────────────────────── */
+body.dark-theme *,
+body.dark-theme *::before,
+body.dark-theme *::after {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease !important;
+}
+
+/* ── Toggle button ───────────────────────────────────────── */
+.dark-theme-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  font-size: 12px !important;
+  font-family: inherit !important;
+  color: inherit !important;
+  white-space: nowrap !important;
+  transition: background 0.15s, border-color 0.15s, color 0.15s !important;
+}
+
+.dark-theme-btn:hover {
+  background: rgba(189,147,249,0.15) !important;
+  border-color: rgba(189,147,249,0.4) !important;
+  color: #bd93f9 !important;
+}
+
+/* ── Minimap toggle button ───────────────────────────────── */
+body.dark-theme .toggle[title*="minimap"],
+body.dark-theme .toggle[title*="Minimap"],
+body.dark-theme div.toggle {
+  background: var(--dt-bg2) !important;
+  border: 1px solid var(--dt-border) !important;
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme div.toggle:hover {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+/* Minimap panel itself */
+body.dark-theme .djs-minimap,
+body.dark-theme [class*="minimap"],
+body.dark-theme [class*="Minimap"] {
+  background: var(--dt-bg2) !important;
+  border: 1px solid var(--dt-border) !important;
+}
+
+body.dark-theme .djs-minimap svg,
+body.dark-theme [class*="minimap"] svg {
+  background: var(--dt-bg0) !important;
+}
+
+/* ── Tab bar (exact classes) ─────────────────────────────── */
+body.dark-theme .tabs-container {
+  background: var(--dt-bg1) !important;
+  border-bottom: 1px solid var(--dt-border) !important;
+}
+
+body.dark-theme .tab {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text2) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme .tab--active {
+  background: var(--dt-bg0) !important;
+  color: var(--dt-text) !important;
+}
+
+body.dark-theme .tab:hover:not(.tab--active) {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+body.dark-theme .tab__name {
+  color: inherit !important;
+}
+
+body.dark-theme .tab__type svg {
+  color: var(--dt-text2) !important;
+  fill: var(--dt-text2) !important;
+}
+
+body.dark-theme .tab--active .tab__type svg {
+  color: var(--dt-accent) !important;
+  fill: var(--dt-accent) !important;
+}
+
+/* Close button — hardcoded fill="#000" override */
+body.dark-theme .tab__close svg path,
+body.dark-theme .tab__close svg {
+  fill: var(--dt-text3) !important;
+}
+
+body.dark-theme .tab__close:hover svg path,
+body.dark-theme .tab__close:hover svg {
+  fill: var(--dt-text) !important;
+}
+
+body.dark-theme .tab__close {
+  background: transparent !important;
+  border: none !important;
+}
+
+body.dark-theme .tab__close:hover {
+  background: var(--dt-bgh) !important;
+  border-radius: 3px !important;
+}
+
+/* ── Tab action buttons (Create new, More actions) ───────── */
+body.dark-theme .btn--tab-action,
+body.dark-theme [class*="btn--tab-action"] {
+  background: transparent !important;
+  border: none !important;
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme .btn--tab-action:hover {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+body.dark-theme .btn--tab-action svg path,
+body.dark-theme .btn--tab-action svg {
+  fill: var(--dt-text2) !important;
+}
+
+body.dark-theme .btn--tab-action:hover svg path,
+body.dark-theme .btn--tab-action:hover svg {
+  fill: var(--dt-text) !important;
+}
+
+/* The wrapper div with hashed class */
+body.dark-theme .tabs-container > div:last-child,
+body.dark-theme [class*="TabBar"] > div:last-child {
+  background: var(--dt-bg1) !important;
+}
+
+/* ── Tab actions container (hashed class, target by content) */
+body.dark-theme div:has(> .btn--tab-action) {
+  background: var(--dt-bg1) !important;
+  border-left: 1px solid var(--dt-border) !important;
+}
+
+/* tab bar background is covered by --tab-bar-background-color override below */
+
+/* ── Override ALL Camunda root CSS variables ─────────────── */
+body.dark-theme {
+
+  /* Base colour palette — remap light greys to dark */
+  --color-white:              var(--dt-bg0);
+  --color-white-opacity-80:   rgba(40, 42, 54, 0.8);
+  --color-black-opacity-10:   rgba(0, 0, 0, 0.1);
+  --color-black-opacity-30:   rgba(0, 0, 0, 0.3);
+
+  --color-grey-225-10-15:     var(--dt-text);     /* was very dark — now light text */
+  --color-grey-225-10-35:     var(--dt-text2);    /* secondary text */
+  --color-grey-225-10-55:     var(--dt-text3);    /* muted text */
+  --color-grey-225-10-70:     var(--dt-border);   /* borders */
+  --color-grey-225-10-75:     var(--dt-border);
+  --color-grey-225-10-80:     var(--dt-bgh);      /* hover */
+  --color-grey-225-10-85:     var(--dt-bg1);      /* tab bar, status bar */
+  --color-grey-225-10-90:     var(--dt-bg2);      /* panels */
+  --color-grey-225-10-95:     var(--dt-bg2);      /* inputs, light panels */
+  --color-grey-225-10-97:     var(--dt-bg3);      /* lightest panels */
+
+  /* Tab bar */
+  --tab-bar-background-color:              var(--dt-bg1);
+  --tab-bar-border-color:                  var(--dt-border);
+  --tabs-container-background-color:       var(--dt-bg1);
+  --tab-font-color:                        var(--dt-text2);
+  --tab-icon-color:                        var(--dt-text3);
+  --tab-border-right-color:                var(--dt-border);
+  --tab-close-background-color:            transparent;
+  --tab-close-hover-background-color:      var(--dt-bgh);
+  --tab-close-icon-fill-color:             var(--dt-text2);
+  --tab-dirty-icon-fill-color:             var(--dt-border);
+  --tab-line-active-background-color:      var(--dt-accent);
+  --tab-line-hover-background-color:       var(--dt-text3);
+  --tab-active-background-color:           var(--dt-bg0);
+  --tab-dirty-marker-background-color:     var(--dt-accent);
+  --tab-dirty-marker-border-color:         var(--dt-accent);
+
+  /* Tab action buttons */
+  --tab-action-icon-color:                 var(--dt-text2);
+  --tab-action-hover-background-color:     var(--dt-bgh);
+  --tab-action-active-background-color:    var(--dt-bgh);
+  --tab-action-active-icon-color:          var(--dt-text);
+
+  /* Status bar */
+  --status-bar-background-color:           var(--dt-bg1);
+  --status-bar-border-color:               var(--dt-border);
+  --status-bar-font-color:                 var(--dt-text2);
+  --status-bar-icon-font-color:            var(--dt-text3);
+  --status-bar-focus-background-color:     var(--dt-bgh);
+  --status-bar-hover-background-color:     var(--dt-bgh);
+  --status-bar-active-background-color:    var(--dt-bgh);
+  --status-bar-active-hover-background-color: var(--dt-bgh);
+  --status-bar-active-font-color:          var(--dt-text);
+  --status-bar-active-icon-font-color:     var(--dt-text2);
+
+  /* Overlay / modal */
+  --overlay-background-color:              var(--dt-bg2);
+  --overlay-border-color:                  var(--dt-border);
+  --overlay-font-color:                    var(--dt-text);
+  --overlay-title-color:                   var(--dt-text);
+  --overlay-dropdown-option-background-color:       var(--dt-bg2);
+  --overlay-dropdown-option-color:                  var(--dt-text);
+  --overlay-dropdown-option-icon-color:             var(--dt-text2);
+  --overlay-dropdown-option-hover-background-color: var(--dt-bgh);
+  --overlay-dropdown-focus-hover-background-color:  var(--dt-bgh);
+  --overlay-dropdown-section-header-color:          var(--dt-text3);
+
+  /* Notification */
+  --notification-border-color:             var(--dt-border);
+  --notification-background-color:         var(--dt-bg2);
+  --notification-light-background-color:   var(--dt-bg3);
+  --notification-title-font-color:         var(--dt-text);
+  --notification-font-color:               var(--dt-text2);
+
+  /* Log panel */
+  --log-color:                             var(--dt-text);
+  --log-border-color:                      var(--dt-border);
+  --log-background-color:                  var(--dt-bg1);
+  --log-resizer-border-color:              var(--dt-border);
+  --log-button-background-color:           var(--dt-bg2);
+  --log-button-border-color:               var(--dt-border);
+  --log-button-hover-background-color:     var(--dt-bgh);
+
+  /* Linting */
+  --linting-tab-item-background-color:     var(--dt-bg2);
+  --linting-tab-item-border-color:         var(--dt-border);
+
+  /* Panel */
+  --panel-text-color:                      var(--dt-text);
+
+  /* XML editor */
+  --xml-editor-button-color:               var(--dt-text2);
+  --xml-editor-button-border-color:        var(--dt-border);
+  --xml-editor-button-background-color:    var(--dt-bg2);
+
+  /* Focus */
+  --focus-outline-color:                   var(--dt-accent);
+
+  /* CDS (Carbon Design System) tokens */
+  --cds-layer:                             var(--dt-bg2);
+  --cds-layer-active:                      var(--dt-bgh);
+  --cds-layer-hover:                       var(--dt-bgh);
+  --cds-layer-selected:                    var(--dt-bgh);
+  --cds-layer-selected-hover:              var(--dt-bg2);
+  --cds-layer-accent:                      var(--dt-bg3);
+  --cds-layer-accent-hover:                var(--dt-bgh);
+  --cds-layer-accent-active:               var(--dt-border);
+  --cds-field:                             var(--dt-bg2);
+  --cds-field-hover:                       var(--dt-bgh);
+  --cds-border-subtle:                     var(--dt-border);
+  --cds-border-subtle-selected:            var(--dt-border);
+  --cds-border-strong:                     var(--dt-text3);
+  --cds-border-tile:                       var(--dt-border);
+  --cds-background-brand:                  var(--dt-accent);
+  --cds-border-interactive:                var(--dt-accent);
+  --cds-focus:                             var(--dt-accent);
+  --cds-icon-interactive:                  var(--dt-accent);
+  --cds-interactive:                       var(--dt-accent);
+  --cds-link-primary:                      var(--dt-cyan);
+  --cds-link-primary-hover:                var(--dt-cyan);
+  --cds-link-secondary:                    var(--dt-cyan);
+}
+
+/* ── CodeMirror (XML editor) ─────────────────────────────── */
+body.dark-theme .cm-editor,
+body.dark-theme .cm-editor * {
+  background: var(--dt-bg0) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
+}
+
+body.dark-theme .cm-gutters {
+  background: var(--dt-bg1) !important;
+  border-right: 1px solid var(--dt-border) !important;
+}
+
+body.dark-theme .cm-gutterElement {
+  background: var(--dt-bg1) !important;
+  color: var(--dt-text3) !important;
+}
+
+body.dark-theme .cm-activeLineGutter {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme .cm-activeLine {
+  background: var(--dt-bg2) !important;
+}
+
+body.dark-theme .cm-line {
+  background: transparent !important;
+}
+
+body.dark-theme .cm-cursor {
+  border-left-color: var(--dt-text) !important;
+}
+
+body.dark-theme .cm-selectionBackground,
+body.dark-theme .cm-focused .cm-selectionBackground {
+  background: rgba(189,147,249,0.25) !important;
+}
+
+body.dark-theme .cm-scroller {
+  background: var(--dt-bg0) !important;
+}
+
+/* XML syntax highlighting */
+body.dark-theme .cm-tag,
+body.dark-theme .tok-tagName { color: var(--dt-pink) !important; }
+body.dark-theme .cm-attribute,
+body.dark-theme .tok-attributeName { color: var(--dt-cyan) !important; }
+body.dark-theme .cm-string,
+body.dark-theme .tok-string { color: var(--dt-yellow) !important; }
+body.dark-theme .cm-comment,
+body.dark-theme .tok-comment { color: var(--dt-text3) !important; }
+body.dark-theme .cm-bracket,
+body.dark-theme .tok-angleBracket { color: var(--dt-text2) !important; }
+
+/* Task type icon colours are handled by JS (DarkThemePlugin.js) */
