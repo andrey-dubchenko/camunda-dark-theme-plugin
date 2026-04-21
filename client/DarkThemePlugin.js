@@ -114,12 +114,13 @@ function parseStyleAttr(raw) {
 // WeakMap: SVG element → original style attribute string (before our patches)
 const origStyleAttr = new WeakMap();
 
+// .djs-shape исключает connections; без > ловит вложенные группы (пулы, участники)
 const SHAPE_SEL = [
-  '.djs-element .djs-visual > rect',
-  '.djs-element .djs-visual > circle',
-  '.djs-element .djs-visual > ellipse',
-  '.djs-element .djs-visual > polygon',
-  '.djs-element .djs-visual > path',
+  '.djs-shape .djs-visual rect',
+  '.djs-shape .djs-visual circle',
+  '.djs-shape .djs-visual ellipse',
+  '.djs-shape .djs-visual polygon',
+  '.djs-shape .djs-visual path',
 ].join(',');
 
 // Save raw style attributes. Skips elements already patched by us (!important).
@@ -181,18 +182,28 @@ function applyDark() {
     }
   });
 
+  // Swim lane / participant dividers (polylines and lines inside shapes)
+  document.querySelectorAll('.djs-shape .djs-visual > polyline, .djs-shape .djs-visual > line').forEach(el => {
+    el.style.setProperty('stroke', DARK_STROKE, 'important');
+  });
+
   // Text labels
   document.querySelectorAll('.djs-element .djs-visual text').forEach(el => {
     el.style.setProperty('fill', DARK_TEXT, 'important');
   });
 
-  // Task type icons (gear, envelope, script marker, etc.) sit after the first
-  // rect inside .djs-visual. The loop above gives them DARK_FILL which makes
-  // them invisible against the dark shape background — use ICON_COLOR instead.
-  document.querySelectorAll('.djs-element .djs-visual').forEach(visual => {
-    Array.from(visual.children).forEach((el, i) => {
+  // Иконки типа задачи (шестерёнка, конверт и т.д.) идут после фонового элемента
+  // в .djs-visual. applyDark даёт им DARK_FILL → невидимы на тёмном фоне.
+  // Фоновый элемент — всегда первый дочерний не-текстовый элемент верхнего уровня.
+  const BG_TAGS = new Set(['rect', 'circle', 'ellipse', 'polygon']);
+  document.querySelectorAll('.djs-shape .djs-visual').forEach(visual => {
+    let bgSeen = false;
+    Array.from(visual.children).forEach(el => {
       if (el.tagName === 'text') return;
-      if (el.tagName === 'rect' && i === 0) return; // background shape
+      if (!bgSeen && BG_TAGS.has(el.tagName.toLowerCase())) {
+        bgSeen = true; // первый геометрический элемент — фон шейпа, пропускаем
+        return;
+      }
       if (el.style.fill === DARK_FILL || el.style.fill === 'rgb(56, 58, 74)') {
         el.style.setProperty('fill', ICON_COLOR, 'important');
       }
@@ -215,6 +226,10 @@ function restoreLight() {
 
   document.querySelectorAll('.djs-element .djs-visual text').forEach(el => {
     el.style.removeProperty('fill');
+  });
+
+  document.querySelectorAll('.djs-shape .djs-visual > polyline, .djs-shape .djs-visual > line').forEach(el => {
+    el.style.removeProperty('stroke');
   });
 }
 
@@ -242,6 +257,7 @@ function startObserver(dark) {
   if (!dark) return;
   _observer = new MutationObserver(() => {
     saveOriginals();
+    patchCanvas(true);
     applyDark();
   });
   _observer.observe(document.body, { childList: true, subtree: true });

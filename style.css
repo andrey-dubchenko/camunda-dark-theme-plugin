@@ -275,33 +275,55 @@ body.dark-theme [style*="background-color: rgb(255, 255, 255)"] {
 }
 
 /* ── BPMN shapes ─────────────────────────────────────────── */
-body.dark-theme .djs-element .djs-visual > rect,
-body.dark-theme .djs-element .djs-visual > circle,
-body.dark-theme .djs-element .djs-visual > polygon,
-body.dark-theme .djs-element .djs-visual > ellipse,
-body.dark-theme .djs-element .djs-visual > path {
+/* Используем .djs-shape (не .djs-element), чтобы не захватывать connections.
+   Убираем > чтобы работало и с вложенными группами (пулы/участники). */
+body.dark-theme .djs-shape .djs-visual rect,
+body.dark-theme .djs-shape .djs-visual circle,
+body.dark-theme .djs-shape .djs-visual polygon,
+body.dark-theme .djs-shape .djs-visual ellipse,
+body.dark-theme .djs-shape .djs-visual path {
   fill: var(--dt-bg2) !important;
   stroke: var(--dt-border) !important;
 }
 
-body.dark-theme .djs-element.selected .djs-visual > rect,
-body.dark-theme .djs-element.selected .djs-visual > circle,
-body.dark-theme .djs-element.selected .djs-visual > polygon,
-body.dark-theme .djs-element.selected .djs-visual > ellipse,
-body.dark-theme .djs-element.selected .djs-visual > path {
+/* Canvas background rect */
+body.dark-theme .djs-canvas-background {
+  fill: var(--dt-bg0) !important;
+}
+
+body.dark-theme .djs-element.selected .djs-visual rect,
+body.dark-theme .djs-element.selected .djs-visual circle,
+body.dark-theme .djs-element.selected .djs-visual polygon,
+body.dark-theme .djs-element.selected .djs-visual ellipse,
+body.dark-theme .djs-element.selected .djs-visual path {
   stroke: var(--dt-accent) !important;
   stroke-width: 2px !important;
 }
 
-body.dark-theme .djs-element.hover .djs-visual > rect,
-body.dark-theme .djs-element.hover .djs-visual > circle,
-body.dark-theme .djs-element.hover .djs-visual > polygon,
-body.dark-theme .djs-element.hover .djs-visual > ellipse {
+body.dark-theme .djs-element.hover .djs-visual rect,
+body.dark-theme .djs-element.hover .djs-visual circle,
+body.dark-theme .djs-element.hover .djs-visual polygon,
+body.dark-theme .djs-element.hover .djs-visual ellipse {
   stroke: var(--dt-cyan) !important;
 }
 
 body.dark-theme .djs-element .djs-visual text {
   fill: var(--dt-text) !important;
+}
+
+/* Swim lane / participant dividers (polylines and lines inside shapes) */
+body.dark-theme .djs-shape .djs-visual > polyline,
+body.dark-theme .djs-shape .djs-visual > line {
+  stroke: var(--dt-border) !important;
+  fill: none !important;
+}
+
+/* SVG stroke set via inline style attribute (not caught by attribute selectors) */
+body.dark-theme .djs-element .djs-visual [style*="stroke: black"],
+body.dark-theme .djs-element .djs-visual [style*="stroke: #000"],
+body.dark-theme .djs-element .djs-visual [style*="stroke: rgb(0,0,0)"],
+body.dark-theme .djs-element .djs-visual [style*="stroke: rgb(0, 0, 0)"] {
+  stroke: var(--dt-border) !important;
 }
 
 /* Sequence flows */
