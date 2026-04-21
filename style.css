@@ -372,6 +372,28 @@ body.dark-theme .djs-element .djs-visual [style*="fill: rgb(255"] {
   fill: var(--dt-bg2) !important;
 }
 
+/* djs-outline: diagram-js ставит белый stroke на все элементы (всегда в DOM) */
+body.dark-theme .djs-outline {
+  stroke: transparent !important;
+  fill: none !important;
+}
+
+/* При выделении — показываем outline цветом акцента */
+body.dark-theme .djs-element.selected .djs-outline {
+  stroke: var(--dt-accent) !important;
+  stroke-width: 1px !important;
+  fill: none !important;
+}
+
+/* Hit-area элементы должны быть полностью невидимы */
+body.dark-theme .djs-hit,
+body.dark-theme .djs-hit-all,
+body.dark-theme .djs-hit-stroke,
+body.dark-theme .djs-hit-click-stroke {
+  fill: none !important;
+  stroke: none !important;
+}
+
 /* Selection box */
 body.dark-theme .djs-lasso-tool rect,
 body.dark-theme .djs-selection rect {
@@ -406,6 +428,33 @@ body.dark-theme .djs-palette-separator {
   background: transparent !important;
 }
 
+/* ── Create pad (boundary events, append) ───────────────── */
+body.dark-theme .djs-create-pad-entries {
+  background: var(--dt-bg3) !important;
+  border: 1px solid var(--dt-border) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5) !important;
+}
+
+body.dark-theme .djs-create-pad-entry {
+  background: transparent !important;
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme .djs-create-pad-entry:hover {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+/* BPMN webfont icons внутри create pad */
+body.dark-theme [class*="bpmn-icon-"] {
+  color: var(--dt-text2) !important;
+}
+
+body.dark-theme [class*="bpmn-icon-"]:hover {
+  color: var(--dt-text) !important;
+}
+
 /* ── Context pad ─────────────────────────────────────────── */
 body.dark-theme .djs-context-pad {
   background: var(--dt-bg3) !important;
@@ -423,30 +472,40 @@ body.dark-theme .djs-context-pad .entry:hover {
 }
 
 /* ── Popup / replace menu ────────────────────────────────── */
-body.dark-theme .djs-popup {
+body.dark-theme .djs-popup,
+body.dark-theme .djs-popup-menu,
+body.dark-theme [class*="popup-menu"],
+body.dark-theme [class*="PopupMenu"] {
   background: var(--dt-bg3) !important;
   border: 1px solid var(--dt-border) !important;
   box-shadow: 0 8px 24px rgba(0,0,0,.6) !important;
   color: var(--dt-text) !important;
 }
 
-body.dark-theme .djs-popup * {
+body.dark-theme .djs-popup *,
+body.dark-theme .djs-popup-menu *,
+body.dark-theme [class*="popup-menu"] * {
   background: var(--dt-bg3) !important;
   color: var(--dt-text) !important;
   border-color: var(--dt-border) !important;
 }
 
-body.dark-theme .djs-popup-header {
+body.dark-theme .djs-popup-header,
+body.dark-theme [class*="popup-menu-header"],
+body.dark-theme [class*="popup-header"] {
   background: var(--dt-bg2) !important;
   border-bottom: 1px solid var(--dt-border) !important;
   color: var(--dt-text2) !important;
 }
 
-body.dark-theme .djs-popup .entry:hover {
+body.dark-theme .djs-popup .entry:hover,
+body.dark-theme .djs-popup-menu .entry:hover,
+body.dark-theme [class*="popup-menu"] .entry:hover {
   background: var(--dt-bgh) !important;
 }
 
-body.dark-theme .djs-popup input {
+body.dark-theme .djs-popup input,
+body.dark-theme .djs-popup-menu input {
   background: var(--dt-bg2) !important;
   color: var(--dt-text) !important;
   border-color: var(--dt-border) !important;
@@ -459,6 +518,31 @@ body.dark-theme [class*="Tooltip"] {
   color: var(--dt-text) !important;
   border: 1px solid var(--dt-border) !important;
   box-shadow: 0 2px 8px rgba(0,0,0,.5) !important;
+}
+
+/* Псевдоэлемент-тултип на записях контекстного пада */
+body.dark-theme .djs-context-pad .entry::after,
+body.dark-theme .djs-context-pad .entry::before {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border: 1px solid var(--dt-border) !important;
+}
+
+/* HTML-оверлеи над canvas (drag hints, attach labels и т.п.) */
+body.dark-theme .djs-overlay-container .djs-overlay {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border: 1px solid var(--dt-border) !important;
+  border-radius: 4px !important;
+}
+
+/* CDS (Carbon Design System) поповеры — используются в Camunda 8 */
+body.dark-theme [class*="cds--popover"],
+body.dark-theme [class*="cds--tooltip"],
+body.dark-theme [class*="cds--assistive-text"] {
+  background: var(--dt-bg2) !important;
+  color: var(--dt-text) !important;
+  border-color: var(--dt-border) !important;
 }
 
 /* ── Modals / overlays ───────────────────────────────────── */
@@ -799,6 +883,21 @@ body.dark-theme {
   --cds-link-primary:                      var(--dt-cyan);
   --cds-link-primary-hover:                var(--dt-cyan);
   --cds-link-secondary:                    var(--dt-cyan);
+
+  /* CDS tooltip / popover */
+  --cds-tooltip-background:               var(--dt-bg2);
+  --cds-tooltip-text-color:               var(--dt-text);
+  --cds-popover-background:               var(--dt-bg2);
+  --cds-popover-drop-shadow:              0 8px 24px rgba(0,0,0,.6);
+  --cds-overlay:                          rgba(0,0,0,.5);
+  --cds-text-primary:                     var(--dt-text);
+  --cds-text-secondary:                   var(--dt-text2);
+  --cds-text-helper:                      var(--dt-text3);
+  --cds-text-on-color:                    var(--dt-bg0);
+  --cds-text-inverse:                     var(--dt-bg0);
+  --cds-icon-primary:                     var(--dt-text);
+  --cds-icon-secondary:                   var(--dt-text2);
+  --cds-icon-inverse:                     var(--dt-bg0);
 }
 
 /* ── CodeMirror (XML editor) ─────────────────────────────── */
