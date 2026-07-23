@@ -545,6 +545,50 @@ body.dark-theme [class*="cds--assistive-text"] {
   border-color: var(--dt-border) !important;
 }
 
+/* CDS Button (шестерёнка настроек в properties panel и т.п., Camunda ≥5.49)
+   [class*="cds--btn"] дублируется — это намеренный трюк для повышения
+   специфичности, чтобы гарантированно перебивать .btn--tab-action
+   независимо от порядка правил в файле (та же специфичность иначе). */
+body.dark-theme [class*="cds--btn"][class*="cds--btn"] {
+  background: transparent !important;
+  color: var(--dt-text2) !important;
+  border-color: transparent !important;
+}
+
+body.dark-theme [class*="cds--btn"][class*="cds--btn"]:hover {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-text) !important;
+}
+
+body.dark-theme [class*="cds--btn--selected"][class*="cds--btn--selected"],
+body.dark-theme [class*="cds--btn"][class*="cds--btn"][aria-pressed="true"] {
+  background: var(--dt-bgh) !important;
+  color: var(--dt-accent) !important;
+}
+
+body.dark-theme [class*="cds--btn--primary"][class*="cds--btn--primary"] {
+  background: var(--dt-accent) !important;
+  color: var(--dt-bg0) !important;
+}
+
+body.dark-theme [class*="cds--btn"][class*="cds--btn"] svg,
+body.dark-theme [class*="cds--btn"][class*="cds--btn"] svg path {
+  fill: var(--dt-text2) !important;
+  transition: none !important;
+}
+
+body.dark-theme [class*="cds--btn--selected"][class*="cds--btn--selected"] svg,
+body.dark-theme [class*="cds--btn--selected"][class*="cds--btn--selected"] svg path,
+body.dark-theme [class*="cds--btn"][class*="cds--btn"][aria-pressed="true"] svg,
+body.dark-theme [class*="cds--btn"][class*="cds--btn"][aria-pressed="true"] svg path {
+  fill: var(--dt-accent) !important;
+}
+
+/* Закрытый тултип/попап Carbon не должен получать непрозрачный фон */
+body.dark-theme [role="tooltip"][aria-hidden="true"] {
+  background: transparent !important;
+}
+
 /* ── Modals / overlays ───────────────────────────────────── */
 body.dark-theme [class*="modal__overlay"],
 body.dark-theme [class*="Modal__overlay"],

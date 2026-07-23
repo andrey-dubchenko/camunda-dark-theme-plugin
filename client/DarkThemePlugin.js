@@ -32,10 +32,17 @@ function parseRGB(str) {
   if (!str || str === 'none' || str === '') return null;
   try {
     const ctx = document.createElement('canvas').getContext('2d');
+    // Two different sentinels: if str is invalid, the assignment is a no-op
+    // and each probe keeps its own sentinel, so a !== b. A colliding sentinel
+    // value (e.g. str === '#010203') no longer causes a false "invalid".
     ctx.fillStyle = '#010203';
     ctx.fillStyle = str;
-    if (ctx.fillStyle === '#010203') return null;
-    const m = ctx.fillStyle.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    const a = ctx.fillStyle;
+    ctx.fillStyle = '#fdfefc';
+    ctx.fillStyle = str;
+    const b = ctx.fillStyle;
+    if (a !== b) return null;
+    const m = a.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
     if (!m) return null;
     return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
   } catch (e) {
@@ -157,6 +164,11 @@ function patchCanvas(dark) {
 
 // ── Shape colour patching ─────────────────────────────────────────────────────
 
+// WeakSet of elements we just painted DARK_FILL (unset/near-white fill),
+// so the icon-colour pass below can find them without re-parsing style.fill
+// (which browsers normalise to rgb(), making string comparisons fragile).
+const paintedDarkFill = new WeakSet();
+
 function applyDark() {
   // Patch shape fills and strokes
   document.querySelectorAll(SHAPE_SEL).forEach(el => {
@@ -169,8 +181,10 @@ function applyDark() {
     const fl = getLightness(origFill);
     if (fl < 0 || fl > 0.94) {
       el.style.setProperty('fill', DARK_FILL, 'important');
+      paintedDarkFill.add(el);
     } else {
       el.style.setProperty('fill', darkenColor(origFill) || DARK_FILL, 'important');
+      paintedDarkFill.delete(el);
     }
 
     // Stroke: unset or near-white → DARK_STROKE; custom → darken
@@ -204,7 +218,7 @@ function applyDark() {
         bgSeen = true; // первый геометрический элемент — фон шейпа, пропускаем
         return;
       }
-      if (el.style.fill === DARK_FILL || el.style.fill === 'rgb(56, 58, 74)') {
+      if (paintedDarkFill.has(el)) {
         el.style.setProperty('fill', ICON_COLOR, 'important');
       }
     });
@@ -255,10 +269,18 @@ function disableDark() {
 function startObserver(dark) {
   if (_observer) { _observer.disconnect(); _observer = null; }
   if (!dark) return;
+  // Coalesce bursts of mutations (e.g. dragging, batch re-renders) into a
+  // single pass instead of re-scanning the whole document per mutation record.
+  let scheduled = false;
   _observer = new MutationObserver(() => {
-    saveOriginals();
-    patchCanvas(true);
-    applyDark();
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      saveOriginals();
+      patchCanvas(true);
+      applyDark();
+    });
   });
   _observer.observe(document.body, { childList: true, subtree: true });
 }
