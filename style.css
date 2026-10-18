@@ -16,11 +16,10 @@ body.dark-theme {
   --dt-text3:   #6272a4;   /* muted text */
   --dt-accent:  #bd93f9;   /* purple */
   --dt-cyan:    #8be9fd;
-  --dt-green:   #50fa7b;
-  --dt-orange:  #ffb86c;
   --dt-pink:    #ff79c6;
-  --dt-red:     #ff5555;
   --dt-yellow:  #f1fa8c;
+  --dt-red:     #ff5555;   /* validation errors */
+  --dt-green:   #50fa7b;   /* validation success */
 }
 
 /* ── App shell ───────────────────────────────────────────── */
@@ -40,12 +39,22 @@ body.dark-theme main,
 body.dark-theme nav,
 body.dark-theme header,
 body.dark-theme footer,
-body.dark-theme span,
+/* code lines keep their syntax-highlight colours (see CodeMirror below) */
+body.dark-theme span:not(.cm-line span),
 body.dark-theme p,
 body.dark-theme li,
 body.dark-theme td,
 body.dark-theme th {
   color: var(--dt-text) !important;
+}
+
+/* Semantic text colours: the catch-all above would flatten them */
+body.dark-theme .invalid-feedback {
+  color: var(--dt-red) !important;
+}
+
+body.dark-theme .valid-feedback {
+  color: var(--dt-green) !important;
 }
 
 /* ── Menu bar ────────────────────────────────────────────── */
@@ -119,7 +128,7 @@ body.dark-theme [class*="WelcomePage"] {
   color: var(--dt-text) !important;
 }
 
-/* ── Properties panel — Camunda 8 ────────────────────────── */
+/* ── Properties panel ────────────────────────────────────── */
 body.dark-theme [class*="bio-properties-panel"],
 body.dark-theme [class*="PropertiesPanel"],
 body.dark-theme [class*="properties-panel"] {
@@ -147,21 +156,21 @@ body.dark-theme [class*="properties-panel"] .group-header {
   color: var(--dt-text2) !important;
 }
 
-/* ── Properties panel — Camunda 7 ────────────────────────── */
-body.dark-theme .bpp-properties-panel,
-body.dark-theme .bpp-properties-panel *,
-body.dark-theme .properties-panel-parent,
-body.dark-theme .properties-panel-parent * {
-  background: var(--dt-bg3) !important;
-  color: var(--dt-text) !important;
-  border-color: var(--dt-border) !important;
+/* Header parts (icon / type / actions) matched the header rule above and got
+   their own box + bottom border; only the header itself should have them. */
+body.dark-theme .bio-properties-panel-header-icon,
+body.dark-theme .bio-properties-panel-header-labels,
+body.dark-theme .bio-properties-panel-header-type,
+body.dark-theme .bio-properties-panel-header-actions {
+  background: transparent !important;
+  border: none !important;
 }
 
-body.dark-theme .bpp-properties-panel .group-header,
-body.dark-theme .bpp-properties-panel .bpp-panel-header,
-body.dark-theme .properties-panel-parent .group-header {
-  background: var(--dt-bg2) !important;
-  color: var(--dt-text2) !important;
+/* Element icon is drawn in near-black: invisible on the dark header */
+body.dark-theme .bio-properties-panel-header-icon svg,
+body.dark-theme .bio-properties-panel-header-icon svg path {
+  background: transparent !important;
+  fill: var(--dt-text2) !important;
 }
 
 /* ── Labels ──────────────────────────────────────────────── */
@@ -245,17 +254,13 @@ body.dark-theme svg.djs-overlay-container {
 }
 
 /* diagram-js white background rect (first rect inside root <g>) */
-body.dark-theme svg > g > rect:first-child,
-body.dark-theme .layer-base > rect:first-child,
-body.dark-theme .djs-drilldown-overlay {
+body.dark-theme svg > g > rect:first-child {
   fill: var(--dt-bg0) !important;
 }
 
 /* Reset/zoom button (white box top-right corner) */
 body.dark-theme .bjs-powered-by,
 body.dark-theme [class*="powered-by"],
-body.dark-theme .djs-reset-zoom,
-body.dark-theme [title*="Reset Zoom"],
 body.dark-theme [title*="reset"],
 body.dark-theme .bjs-container > div:not(.djs-container) {
   background: var(--dt-bg2) !important;
@@ -284,11 +289,6 @@ body.dark-theme .djs-shape .djs-visual ellipse,
 body.dark-theme .djs-shape .djs-visual path {
   fill: var(--dt-bg2) !important;
   stroke: var(--dt-border) !important;
-}
-
-/* Canvas background rect */
-body.dark-theme .djs-canvas-background {
-  fill: var(--dt-bg0) !important;
 }
 
 body.dark-theme .djs-element.selected .djs-visual rect,
@@ -395,7 +395,6 @@ body.dark-theme .djs-hit-click-stroke {
 }
 
 /* Selection box */
-body.dark-theme .djs-lasso-tool rect,
 body.dark-theme .djs-selection rect {
   stroke: var(--dt-accent) !important;
   fill: rgba(189,147,249,0.1) !important;
@@ -423,7 +422,8 @@ body.dark-theme .djs-palette .highlighted-entry {
   color: var(--dt-accent) !important;
 }
 
-body.dark-theme .djs-palette-separator {
+body.dark-theme .djs-palette-separator,
+body.dark-theme .djs-palette .separator {
   border-top-color: var(--dt-border) !important;
   background: transparent !important;
 }
@@ -473,7 +473,6 @@ body.dark-theme .djs-context-pad .entry:hover {
 
 /* ── Popup / replace menu ────────────────────────────────── */
 body.dark-theme .djs-popup,
-body.dark-theme .djs-popup-menu,
 body.dark-theme [class*="popup-menu"],
 body.dark-theme [class*="PopupMenu"] {
   background: var(--dt-bg3) !important;
@@ -483,7 +482,6 @@ body.dark-theme [class*="PopupMenu"] {
 }
 
 body.dark-theme .djs-popup *,
-body.dark-theme .djs-popup-menu *,
 body.dark-theme [class*="popup-menu"] * {
   background: var(--dt-bg3) !important;
   color: var(--dt-text) !important;
@@ -499,25 +497,35 @@ body.dark-theme [class*="popup-header"] {
 }
 
 body.dark-theme .djs-popup .entry:hover,
-body.dark-theme .djs-popup-menu .entry:hover,
 body.dark-theme [class*="popup-menu"] .entry:hover {
   background: var(--dt-bgh) !important;
 }
 
-body.dark-theme .djs-popup input,
-body.dark-theme .djs-popup-menu input {
+body.dark-theme .djs-popup input {
   background: var(--dt-bg2) !important;
   color: var(--dt-text) !important;
   border-color: var(--dt-border) !important;
 }
 
 /* ── Tooltip ─────────────────────────────────────────────── */
-body.dark-theme [class*="tooltip"],
+/* Wrappers only host the trigger (panel toggles, group titles); the popup
+   itself is styled, see the transparent reset below */
+body.dark-theme [class*="tooltip"]:not([class*="wrapper"]):not(.cds--popover-container),
 body.dark-theme [class*="Tooltip"] {
   background: var(--dt-bg2) !important;
   color: var(--dt-text) !important;
   border: 1px solid var(--dt-border) !important;
   box-shadow: 0 2px 8px rgba(0,0,0,.5) !important;
+}
+
+/* Tooltip trigger wrappers must not look like popups. Declared after the
+   generic properties-panel / tooltip rules so it wins at equal specificity. */
+body.dark-theme [class*="tooltip-wrapper"],
+body.dark-theme [class*="tooltip-trigger__wrapper"],
+body.dark-theme .cds--popover-container.cds--tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Псевдоэлемент-тултип на записях контекстного пада */
@@ -537,8 +545,9 @@ body.dark-theme .djs-overlay-container .djs-overlay {
 }
 
 /* CDS (Carbon Design System) поповеры — используются в Camunda 8 */
-body.dark-theme [class*="cds--popover"],
-body.dark-theme [class*="cds--tooltip"],
+/* .cds--popover-container wraps the trigger, only the popup itself is styled */
+body.dark-theme [class*="cds--popover"]:not(.cds--popover-container),
+body.dark-theme [class*="cds--tooltip"]:not([class*="wrapper"]):not(.cds--popover-container),
 body.dark-theme [class*="cds--assistive-text"] {
   background: var(--dt-bg2) !important;
   color: var(--dt-text) !important;
@@ -799,7 +808,7 @@ body.dark-theme [class*="TabBar"] > div:last-child {
 }
 
 /* ── Tab actions container (hashed class, target by content) */
-body.dark-theme div:has(> .btn--tab-action) {
+body.dark-theme div:has(> .btn--tab-action):not(.cds--tooltip-trigger__wrapper) {
   background: var(--dt-bg1) !important;
   border-left: 1px solid var(--dt-border) !important;
 }
@@ -944,12 +953,146 @@ body.dark-theme {
   --cds-icon-inverse:                     var(--dt-bg0);
 }
 
+/* ── Variables panel (Camunda 8, bio-vo-*) ─────────────────
+   The variables are declared on the element itself, so :root/body overrides
+   do not reach them — redeclare them here with a more specific selector. */
+body.dark-theme .bio-vo-tab-content {
+  --color-white:            var(--dt-bg3);
+  --bio-vo-bg:              var(--dt-bg3);
+  --bio-vo-header-bg:       var(--dt-bg2);
+  --bio-vo-text-primary:    var(--dt-text);
+  --bio-vo-text-secondary:  var(--dt-text2);
+  --bio-vo-text-muted:      var(--dt-text3);
+  --bio-vo-border-color:    var(--dt-border);
+}
+
+body.dark-theme .vd-context-menu {
+  --bio-vo-context-menu-background-color:             var(--dt-bg2);
+  --bio-vo-context-menu-item-hover-background-color:  var(--dt-bgh);
+  --bio-vo-context-menu-separator-background-color:   var(--dt-border);
+  --bio-vo-context-menu-shadow-color-1:               rgba(0,0,0,.4);
+  --bio-vo-context-menu-shadow-color-2:               rgba(0,0,0,.6);
+  --bio-vo-text-primary:                              var(--dt-text);
+}
+
+body.dark-theme .bio-vo-empty-state__icon-container,
+body.dark-theme .task-testing__no-element-icon {
+  background: var(--dt-bg2) !important;
+}
+
+/* ── Form editor (form-js / cfp-*) ──────────────────────────
+   form-js reads its own --color-* tokens (the --cds-* ones are reset by
+   .fjs-no-theme), declared on the elements themselves — redeclare them here. */
+body.dark-theme .cfp-root {
+  --collapsible-border-color:                         var(--dt-border);
+  --collapsible-title-background-color:               var(--dt-bg1);
+  --collapsible-action-fill-color:                    var(--dt-text2);
+  --collapsible-title-hover-action-background-color:  var(--dt-bgh);
+  --collapsible-action-hover-background-color:        var(--dt-bgh);
+  --collapsed-preview-background-color:               var(--dt-bg1);
+  --collapsed-preview-action-fill-color:              var(--dt-text2);
+  --collapsed-preview-hover-action-background-color:  var(--dt-bgh);
+  --collapsed-preview-action-hover-background-color:  var(--dt-bgh);
+  --border-color:                                     var(--dt-border);
+  --background-color:                                 var(--dt-bg1);
+  --palette-background-color:                         var(--dt-bg1);
+  --properties-background-color:                      var(--dt-bg3);
+  --properties-group-background-color:                var(--dt-bg3);
+  --properties-input-background-color:                var(--dt-bg2);
+  --properties-arrow-hover-background-color:          var(--dt-bgh);
+  --container-background-color:                       var(--dt-bg0);
+  --cm-background-color:                              var(--dt-bg0);
+  --drag-container-border-color:                      var(--dt-border);
+}
+
+body.dark-theme .fjs-container {
+  --color-background:           var(--dt-bg2);
+  --color-background-disabled:  var(--dt-bg1);
+  --color-background-readonly:  var(--dt-bg1);
+  --color-background-adornment: var(--dt-bg2);
+  --color-background-inverted:  var(--dt-bg1);
+  --color-background-inverted-hover: var(--dt-bgh);
+  --color-background-active:    var(--dt-bgh);
+  --color-layer:                var(--dt-bg2);
+  --color-layer-accent:         var(--dt-bgh);
+  --color-background-pre:       var(--dt-bg1);
+  --color-icon-base:            var(--dt-text);
+  --color-icon-inverted:        var(--dt-bg0);
+  --color-text:                 var(--dt-text);
+  --color-text-light:           var(--dt-text2);
+  --color-text-lighter:         var(--dt-text2);
+  --color-text-lightest:        var(--dt-text3);
+  --color-text-inverted:        var(--dt-bg0);
+  --color-text-disabled:        var(--dt-text3);
+  --color-borders:              var(--dt-border);
+  --color-borders-group:        var(--dt-border);
+  --color-borders-table:        var(--dt-border);
+  --color-borders-documentPreview: var(--dt-border);
+  --color-borders-disabled:     var(--dt-border);
+  --color-borders-adornment:    var(--dt-border);
+  --color-borders-readonly:     var(--dt-border);
+  --color-borders-inverted:     var(--dt-border);
+  --color-borders-pre:          var(--dt-border);
+  --color-warning:              var(--dt-pink);
+  --color-warning-light:        var(--dt-pink);
+  --color-accent:               var(--dt-cyan);
+  --color-shadow:               rgba(0,0,0,.5);
+}
+
+body.dark-theme .fjs-editor-container {
+  --color-context-pad-item-fill:          var(--dt-text2);
+  --color-dragula-mirror-background:      var(--dt-bg2);
+  --color-dragula-mirror-border:          var(--dt-border);
+  --color-dragula-background:             rgba(189,147,249,.15);
+}
+
+body.dark-theme .fjs-palette-container {
+  --color-palette-text:                   var(--dt-text);
+  --color-palette-container-background:   var(--dt-bg1);
+  --color-palette-container-border:       var(--dt-border);
+  --color-palette-header:                 var(--dt-text);
+  --color-palette-header-background:      var(--dt-bg1);
+  --color-palette-header-border:          var(--dt-border);
+  --color-palette-search-icon:            var(--dt-text2);
+  --color-palette-search-icon-hover:      var(--dt-text);
+  --color-palette-search-background:      var(--dt-bg2);
+  --color-palette-search-border:          var(--dt-border);
+  --color-palette-search-focus-background: var(--dt-bg2);
+  --color-palette-field-background:       var(--dt-bg2);
+  --color-palette-field-border:           var(--dt-border);
+  --color-palette-field-hover-background: var(--dt-bgh);
+  --color-palette-field-hover-border:     var(--dt-border);
+}
+
+body.dark-theme .fjs-properties-container,
+body.dark-theme .cfp-root .cfp-properties .fjs-properties-container {
+  --color-properties-container-background: var(--dt-bg3);
+  --color-properties-container-border:     var(--dt-border);
+}
+
 /* ── CodeMirror (XML editor) ─────────────────────────────── */
 body.dark-theme .cm-editor,
 body.dark-theme .cm-editor * {
   background: var(--dt-bg0) !important;
-  color: var(--dt-text) !important;
   border-color: var(--dt-border) !important;
+}
+
+/* Forced text colour everywhere except inside code lines, so the generated
+   syntax-highlight classes (ͼ*) keep their own colours */
+body.dark-theme .cm-editor,
+body.dark-theme .cm-editor *:not(.cm-line *) {
+  color: var(--dt-text) !important;
+}
+
+/* Highlight colours are designed for a light background: invert lightness,
+   keep hue. Class names of the tokens are generated, so target by position. */
+body.dark-theme .cm-line span {
+  background: transparent !important;
+}
+
+/* direct children only: nested token spans would be inverted twice */
+body.dark-theme .cm-line > span {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 body.dark-theme .cm-gutters {
@@ -989,15 +1132,7 @@ body.dark-theme .cm-scroller {
 }
 
 /* XML syntax highlighting */
-body.dark-theme .cm-tag,
-body.dark-theme .tok-tagName { color: var(--dt-pink) !important; }
-body.dark-theme .cm-attribute,
-body.dark-theme .tok-attributeName { color: var(--dt-cyan) !important; }
-body.dark-theme .cm-string,
 body.dark-theme .tok-string { color: var(--dt-yellow) !important; }
-body.dark-theme .cm-comment,
 body.dark-theme .tok-comment { color: var(--dt-text3) !important; }
-body.dark-theme .cm-bracket,
-body.dark-theme .tok-angleBracket { color: var(--dt-text2) !important; }
 
 /* Task type icon colours are handled by JS (DarkThemePlugin.js) */

@@ -9,8 +9,8 @@ echo Building bundle...
 call npm run build
 if errorlevel 1 goto error
 
-echo Creating camunda-dark-theme-plugin-bundle\...
-set DIST_DIR=camunda-dark-theme-plugin-bundle
+echo Creating camunda-dark-theme-plugin\...
+set DIST_DIR=camunda-dark-theme-plugin
 
 if exist "%DIST_DIR%" rmdir /s /q "%DIST_DIR%"
 mkdir "%DIST_DIR%"

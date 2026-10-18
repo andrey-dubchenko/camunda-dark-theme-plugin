@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'camunda-modeler-plugin-helpers/vendor/react';
+import React, { Component } from 'camunda-modeler-plugin-helpers/vendor/react';
 import Fill from 'camunda-modeler-plugin-helpers/components/Fill';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -28,10 +28,27 @@ function saveState(v) {
 
 // ── Colour utilities ──────────────────────────────────────────────────────────
 
+let _ctx = null;
+const _rgbCache = new Map();
+
+function getCtx() {
+  if (!_ctx) _ctx = document.createElement('canvas').getContext('2d');
+  return _ctx;
+}
+
+// "none" / "transparent" are an explicit absence of paint, unlike a missing value.
+function isNoPaint(str) {
+  if (!str) return false;
+  const v = str.trim().toLowerCase();
+  return v === 'none' || v === 'transparent';
+}
+
 function parseRGB(str) {
   if (!str || str === 'none' || str === '') return null;
+  if (_rgbCache.has(str)) return _rgbCache.get(str);
+  let result = null;
   try {
-    const ctx = document.createElement('canvas').getContext('2d');
+    const ctx = getCtx();
     // Two different sentinels: if str is invalid, the assignment is a no-op
     // and each probe keeps its own sentinel, so a !== b. A colliding sentinel
     // value (e.g. str === '#010203') no longer causes a false "invalid".
@@ -41,13 +58,15 @@ function parseRGB(str) {
     ctx.fillStyle = '#fdfefc';
     ctx.fillStyle = str;
     const b = ctx.fillStyle;
-    if (a !== b) return null;
-    const m = a.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-    if (!m) return null;
-    return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
+    if (a === b) {
+      const m = a.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+      if (m) result = { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
+    }
   } catch (e) {
-    return null;
+    result = null;
   }
+  _rgbCache.set(str, result);
+  return result;
 }
 
 function getLightness(str) {
@@ -57,7 +76,9 @@ function getLightness(str) {
   return (Math.max(r, g, b) + Math.min(r, g, b)) / 2;
 }
 
-function darkenColor(str) {
+// Re-render a colour with a new lightness / saturation, keeping its hue.
+// adjust(l, s) -> [newL, newS]
+function adjustColor(str, adjust) {
   const rgb = parseRGB(str);
   if (!rgb) return null;
 
@@ -76,9 +97,7 @@ function darkenColor(str) {
     }
   }
 
-  // Reduce lightness to ~65%, minimum 0.35 for contrast against dark canvas
-  const newL = Math.max(0.35, l * 0.65);
-  const newS = Math.min(1, s * 1.1);
+  const [newL, newS] = adjust(l, s);
 
   function hue2rgb(p, q, t) {
     if (t < 0) t += 1;
@@ -101,6 +120,16 @@ function darkenColor(str) {
   }
 
   return '#' + [nr, ng, nb].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('');
+}
+
+// Fills: reduce lightness to ~65%, minimum 0.35 for contrast against dark canvas
+function darkenColor(str) {
+  return adjustColor(str, (l, s) => [Math.max(0.35, l * 0.65), Math.min(1, s * 1.1)]);
+}
+
+// Strokes: dark outlines vanish on a dark canvas, so lift them to at least 0.6
+function lightenColor(str) {
+  return adjustColor(str, (l, s) => [Math.max(0.6, l), s]);
 }
 
 // ── Style attribute parsing ───────────────────────────────────────────────────
@@ -130,13 +159,22 @@ const SHAPE_SEL = [
   '.djs-shape .djs-visual path',
 ].join(',');
 
+// The original is mirrored into a data attribute so it survives a plugin
+// re-mount (the WeakMap does not) and patched elements can still be restored.
+const ORIG_ATTR = 'data-dt-orig-style';
+
 // Save raw style attributes. Skips elements already patched by us (!important).
 function saveOriginals() {
   document.querySelectorAll(SHAPE_SEL).forEach(el => {
     if (origStyleAttr.has(el)) return;
+    if (el.hasAttribute(ORIG_ATTR)) {
+      origStyleAttr.set(el, el.getAttribute(ORIG_ATTR));
+      return;
+    }
     const raw = el.getAttribute('style') || '';
     if (!raw.includes('!important')) {
       origStyleAttr.set(el, raw);
+      el.setAttribute(ORIG_ATTR, raw);
     }
   });
 }
@@ -151,7 +189,7 @@ function patchCanvas(dark) {
     else      el.style.removeProperty('background');
   });
 
-  document.querySelectorAll('.bjs-container svg > g > rect:first-child, .djs-canvas-background').forEach(el => {
+  document.querySelectorAll('.bjs-container svg > g > rect:first-child').forEach(el => {
     if (dark) { el.setAttribute('fill', bg); el.style.setProperty('fill', bg, 'important'); }
     else      { el.removeAttribute('fill'); el.style.removeProperty('fill'); }
   });
@@ -177,9 +215,13 @@ function applyDark() {
       ? parseStyleAttr(raw)
       : { fill: null, stroke: null };
 
-    // Fill: near-white or unset → DARK_FILL; custom colour → darken
+    // Fill: explicit none/transparent stays transparent (groups, annotations,
+    // inner event circles); near-white or unset → DARK_FILL; custom → darken
     const fl = getLightness(origFill);
-    if (fl < 0 || fl > 0.94) {
+    if (isNoPaint(origFill)) {
+      el.style.setProperty('fill', 'none', 'important');
+      paintedDarkFill.delete(el);
+    } else if (fl < 0 || fl > 0.94) {
       el.style.setProperty('fill', DARK_FILL, 'important');
       paintedDarkFill.add(el);
     } else {
@@ -187,12 +229,15 @@ function applyDark() {
       paintedDarkFill.delete(el);
     }
 
-    // Stroke: unset or near-white → DARK_STROKE; custom → darken
+    // Stroke: explicit none stays none; unset, near-black (bpmn-js default) or
+    // near-white → DARK_STROKE; custom colours are lightened to stay visible
     const sl = getLightness(origStroke);
-    if (sl < 0 || sl > 0.8) {
+    if (isNoPaint(origStroke)) {
+      el.style.setProperty('stroke', 'none', 'important');
+    } else if (sl < 0.15 || sl > 0.8) {
       el.style.setProperty('stroke', DARK_STROKE, 'important');
     } else {
-      el.style.setProperty('stroke', darkenColor(origStroke) || DARK_STROKE, 'important');
+      el.style.setProperty('stroke', lightenColor(origStroke) || DARK_STROKE, 'important');
     }
   });
 
@@ -207,18 +252,13 @@ function applyDark() {
   });
 
   // Иконки типа задачи (шестерёнка, конверт и т.д.) идут после фонового элемента
-  // в .djs-visual. applyDark даёт им DARK_FILL → невидимы на тёмном фоне.
-  // Фоновый элемент — всегда первый дочерний не-текстовый элемент верхнего уровня.
-  const BG_TAGS = new Set(['rect', 'circle', 'ellipse', 'polygon']);
+  // в .djs-visual (в том числе во вложенных <g>). applyDark даёт им DARK_FILL →
+  // невидимы на тёмном фоне. Фон — первый геометрический элемент верхнего уровня.
+  const BG_TAGS = new Set(['rect', 'circle', 'ellipse', 'polygon', 'path']);
   document.querySelectorAll('.djs-shape .djs-visual').forEach(visual => {
-    let bgSeen = false;
-    Array.from(visual.children).forEach(el => {
-      if (el.tagName === 'text') return;
-      if (!bgSeen && BG_TAGS.has(el.tagName.toLowerCase())) {
-        bgSeen = true; // первый геометрический элемент — фон шейпа, пропускаем
-        return;
-      }
-      if (paintedDarkFill.has(el)) {
+    const bg = Array.from(visual.children).find(el => BG_TAGS.has(el.tagName.toLowerCase()));
+    visual.querySelectorAll('rect, circle, ellipse, polygon, path').forEach(el => {
+      if (el !== bg && paintedDarkFill.has(el)) {
         el.style.setProperty('fill', ICON_COLOR, 'important');
       }
     });
@@ -227,8 +267,9 @@ function applyDark() {
 
 function restoreLight() {
   document.querySelectorAll(SHAPE_SEL).forEach(el => {
-    const raw = origStyleAttr.get(el);
-    if (raw !== undefined) {
+    // After a plugin re-mount the WeakMap is empty; fall back to the DOM copy
+    const raw = origStyleAttr.has(el) ? origStyleAttr.get(el) : el.getAttribute(ORIG_ATTR);
+    if (raw !== null && raw !== undefined) {
       if (raw) el.setAttribute('style', raw);
       else     el.removeAttribute('style');
     } else {
@@ -236,6 +277,7 @@ function restoreLight() {
       el.style.removeProperty('stroke');
     }
     origStyleAttr.delete(el);
+    el.removeAttribute(ORIG_ATTR);
   });
 
   document.querySelectorAll('.djs-element .djs-visual text').forEach(el => {
@@ -333,7 +375,7 @@ export default class DarkThemePlugin extends Component {
       document.body.classList.add(BODY_CLASS);
       document.documentElement.classList.add(BODY_CLASS);
       // Patch SVG elements in waves as the diagram renders
-      [100, 500, 1200].forEach(ms => setTimeout(() => {
+      this._timers = [100, 500, 1200].map(ms => setTimeout(() => {
         saveOriginals();
         patchCanvas(true);
         applyDark();
@@ -344,31 +386,34 @@ export default class DarkThemePlugin extends Component {
     }
   }
 
+  componentWillUnmount() {
+    (this._timers || []).forEach(clearTimeout);
+    this._timers = [];
+    startObserver(false);
+  }
+
   _toggle() {
-    this.setState(({ dark }) => {
-      const next = !dark;
-      saveState(next);
-      if (next) { enableDark(); startObserver(true); }
-      else      { disableDark(); startObserver(false); }
-      return { dark: next };
-    });
+    // Side effects stay outside the setState updater (it may run twice).
+    const next = !this.state.dark;
+    saveState(next);
+    if (next) { enableDark(); startObserver(true); }
+    else      { disableDark(); startObserver(false); }
+    this.setState({ dark: next });
   }
 
   render() {
     const { dark } = this.state;
     return (
-      <Fragment>
-        <Fill slot="status-bar__app" group="9_dark-theme">
-          <button
-            className="dark-theme-btn"
-            title={dark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            onClick={this._toggle}
-          >
-            {dark ? <SunIcon /> : <MoonIcon />}
-            <span>{dark ? 'Light' : 'Dark'}</span>
-          </button>
-        </Fill>
-      </Fragment>
+      <Fill slot="status-bar__app" group="9_dark-theme">
+        <button
+          className="dark-theme-btn"
+          title={dark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+          onClick={this._toggle}
+        >
+          {dark ? <SunIcon /> : <MoonIcon />}
+          <span>{dark ? 'Light' : 'Dark'}</span>
+        </button>
+      </Fill>
     );
   }
 }
