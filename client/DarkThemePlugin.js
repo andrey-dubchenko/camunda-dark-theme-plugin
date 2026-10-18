@@ -257,9 +257,18 @@ function applyDark() {
   const BG_TAGS = new Set(['rect', 'circle', 'ellipse', 'polygon', 'path']);
   document.querySelectorAll('.djs-shape .djs-visual').forEach(visual => {
     const bg = Array.from(visual.children).find(el => BG_TAGS.has(el.tagName.toLowerCase()));
+    const bgFill = bg ? bg.style.getPropertyValue('fill') : '';
     visual.querySelectorAll('rect, circle, ellipse, polygon, path').forEach(el => {
-      if (el !== bg && paintedDarkFill.has(el)) {
+      if (el === bg) return;
+      if (paintedDarkFill.has(el)) {
         el.style.setProperty('fill', ICON_COLOR, 'important');
+        return;
+      }
+      // Icons of custom-coloured shapes are filled with the shape's own colour,
+      // so after darkening they match the background and vanish.
+      const fill = el.style.getPropertyValue('fill');
+      if (bgFill && bgFill !== 'none' && fill === bgFill) {
+        el.style.setProperty('fill', DARK_TEXT, 'important');
       }
     });
   });
